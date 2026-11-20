@@ -1,0 +1,11 @@
+node_modules
+.next
+.next-pages
+out
+.env
+.env*.local
+*.tsbuildinfo
+.DS_Store
+.vercel
+public/.frames-tmp-*
+public/.frames-mobile-tmp-*

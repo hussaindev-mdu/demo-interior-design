@@ -1,0 +1,163 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    background-color: rgb(var(--bg-rgb));
+    color-scheme: dark;
+    scroll-padding-top: 80px;
+    overflow-x: clip;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+  body {
+    @apply bg-bg font-sans text-ink/60 antialiased;
+    /* clip (not hidden) so position: sticky keeps working */
+    overflow-x: clip;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: rgb(200 161 101 / 0.35);
+    color: #ede8e0;
+  }
+  :focus-visible {
+    outline: 1px solid #c8a165;
+    outline-offset: 3px;
+  }
+  select option {
+    background-color: rgb(var(--bg-rgb));
+    color: #ede8e0;
+  }
+}
+
+@layer components {
+  .label {
+    @apply text-[11px] font-medium uppercase tracking-label text-gold;
+  }
+
+  .section {
+    @apply mx-auto max-w-site px-6 py-28 md:px-12 md:py-40;
+  }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.9s cubic-bezier(0.22, 1, 0.36, 1), color 0.8s;
+    padding-bottom: 2px;
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  .nav-arrow {
+    @apply flex h-11 w-11 items-center justify-center rounded-full border border-ink/15 text-ink/70 transition-colors duration-800 ease-lux hover:border-gold hover:text-gold;
+  }
+
+  .radio-pill > span {
+    @apply inline-flex h-11 cursor-pointer items-center border border-ink/20 px-6 text-[13px] text-ink/70 transition-colors duration-800 ease-lux;
+  }
+  .radio-pill > span:hover {
+    @apply border-ink/40 text-ink/90;
+  }
+  .radio-pill > input:checked + span {
+    @apply border-gold text-gold;
+  }
+  .radio-pill > input:focus-visible + span {
+    outline: 1px solid #c8a165;
+    outline-offset: 3px;
+  }
+
+  .select-wrap {
+    position: relative;
+  }
+  .select-wrap::after {
+    content: "";
+    position: absolute;
+    right: 4px;
+    bottom: 20px;
+    width: 7px;
+    height: 7px;
+    border-right: 1px solid rgb(237 232 224 / 0.5);
+    border-bottom: 1px solid rgb(237 232 224 / 0.5);
+    transform: rotate(45deg);
+    pointer-events: none;
+  }
+
+  /*
+   * Hero frame fit. Landscape = object-fit: cover. Portrait (phones) = the
+   * whole room, larger than "contain", above centre with feathered edges.
+   * Must match PORTRAIT_FIT in lib/frames.ts (used by the canvas).
+   */
+  .frame-fit {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (orientation: portrait) {
+    .frame-fit {
+      inset: auto;
+      left: 50%;
+      top: 36%;
+      width: 140%;
+      height: auto;
+      max-width: none;
+      transform: translate(-50%, -50%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
+      mask-image: linear-gradient(to bottom, transparent, #000 16%, #000 84%, transparent);
+    }
+  }
+
+  /* Soft dark halo behind hero text so it reads over bright parts of the render
+     (e.g. the chandelier). A contrast aid, not a glow. */
+  .hero-legible h1,
+  .hero-legible h2,
+  .hero-legible p,
+  .hero-legible nav a {
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.6), 0 0 8px rgb(var(--bg-rgb) / 0.55);
+  }
+
+  .scroll-cue {
+    transform-origin: top;
+    animation: cue 2.4s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+  }
+}
+
+@keyframes cue {
+  0% {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  45% {
+    transform: scaleY(1);
+    transform-origin: top;
+  }
+  55% {
+    transform: scaleY(1);
+    transform-origin: bottom;
+  }
+  100% {
+    transform: scaleY(0);
+    transform-origin: bottom;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+  }
+}
